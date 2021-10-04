@@ -23,12 +23,13 @@ namespace Novetta.Dapr.AirlineScheduler
             using var client = new DaprClientBuilder().Build();
 
             // State transactions operate on raw bytes
-            var bytes = JsonSerializer.SerializeToUtf8Bytes(Metadata.Airlines);
+            var airlineBytes = JsonSerializer.SerializeToUtf8Bytes(Metadata.Airlines);
+            var cityBytes = JsonSerializer.SerializeToUtf8Bytes(Metadata.Cities);
 
             var requests = new List<StateTransactionRequest>()
             {
-                new StateTransactionRequest("airlines", bytes, StateOperationType.Upsert),
-                new StateTransactionRequest("oldairlines", null, StateOperationType.Delete)
+                new StateTransactionRequest("airlines", airlineBytes, StateOperationType.Upsert),
+                new StateTransactionRequest("cities", cityBytes, StateOperationType.Upsert),
             };
             
             Console.WriteLine("Executing transaction - save state and delete state");
